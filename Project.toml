@@ -3,5 +3,8 @@ uuid = "fb46300e-f66b-4f64-8dd8-39774d938a41"
 authors = ["James Totterdell <jatotterdell@gmail.com>"]
 version = "0.0.1"
 
+[deps]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
 [compat]
 julia = "1.6.3"
