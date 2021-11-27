@@ -10,6 +10,7 @@
 Modules = [RandomisationModels]
 Order   = [:constant, :type, :function, :macro]
 ```
+
 ## Detailed API
 
 ```@autodocs
