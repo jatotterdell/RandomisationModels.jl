@@ -1,0 +1,7 @@
+name = "RandomisationModels"
+uuid = "fb46300e-f66b-4f64-8dd8-39774d938a41"
+authors = ["James Totterdell <jatotterdell@gmail.com>"]
+version = "0.0.1"
+
+[compat]
+julia = "1.6.3"
