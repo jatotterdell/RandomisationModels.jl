@@ -1,5 +1,7 @@
 module RandomisationModels
 
-greet() = print("Hello World!")
+export plusTwo
+
+plustTwo(x) = return x + 2
 
 end # module
