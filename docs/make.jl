@@ -1,7 +1,8 @@
+push!(LOAD_PATH, "../src/")
+
 using Documenter
 using RandomisationModels
 
-push!(LOAD_PATH, "../src/")
 makedocs(sitename = "RandomisationModels.jl Documentation",
     pages = [
         "Index" => "index.md",

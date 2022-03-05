@@ -1,26 +1,23 @@
 module RandomisationModels
 
-export plusTwo
+using Random: AbstractRNG, GLOBAL_RNG
+using StatsBase: sample, Weights
+import Base.deepcopy
 
-"""
-    plusTwo(x)
+export MultiArmRandomisationModel
+export CompleteRandomisation
+export MassWeightedUrn
 
-Sum the numeric "2" to whatever it receives as input
+export randomise, randomize, randomise!, randomize!
+export target, narms, prob, update!
 
-A more detailed explanation can go here, although I guess it is not needed in this case
+# Internal helper functions
+include("util.jl")
+using .Util
+export Util
 
-# Arguments
-* `x`: The amount to which we want to add 2
-
-# Notes
-* Notes can go here
-
-# Examples
-```julia
-julia> five = plusTwo(3)
-5
-```
-"""
-plusTwo(x) = return x + 2
+include("types.jl")
+include("models/complete-randomisation.jl")
+include("models/mass-weighted-urn.jl")
 
 end # module
