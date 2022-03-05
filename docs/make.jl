@@ -5,8 +5,10 @@ using RandomisationModels
 
 makedocs(sitename = "RandomisationModels.jl Documentation",
     pages = [
-        "Index" => "index.md",
-        "An other page" => "anotherPage.md",
+        "Home" => "index.md",
+        "Library" => [
+            "lib/public.md"
+        ]
     ],
     format = Documenter.HTML(prettyurls = false)
 )
