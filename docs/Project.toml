@@ -1,3 +1,4 @@
 [deps]
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
 RandomisationModels = "fb46300e-f66b-4f64-8dd8-39774d938a41"
+StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"

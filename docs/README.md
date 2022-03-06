@@ -1,4 +1,4 @@
-If running for first time run julia using docs as the project.
+If running for first time run julia using docs as the project, for local build of docs
 
 ```shell
 julia --project=docs/
@@ -18,4 +18,5 @@ On subsequent occassions, it is sufficient to activate the docs environent, and 
 ```julia
 pkg> activate docs
 julia> include("docs/make.jl")
+pkg> activate . # to revert to project environment
 ```
