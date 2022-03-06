@@ -2,13 +2,16 @@ module RandomisationModels
 
 using Random: AbstractRNG, GLOBAL_RNG
 using StatsBase: sample, Weights
+using Distances: euclidean
+
 import Base.deepcopy
+import Base.show
 
 export MultiArmRandomisationModel
 export CompleteRandomisation
 export MassWeightedUrn
 
-export target, narms, randomise, randomize, randomise!, randomize!
+export target, narms, sequence, dist, imbalance, predictability, randomise, randomize, randomise!, randomize!
 export prob, update!
 export mass
 

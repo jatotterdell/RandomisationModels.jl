@@ -4,7 +4,10 @@ abstract type MultiArmRandomisationModel <: RandomisationModel end
 
 target(RM::RandomisationModel) = RM.target
 narms(RM::RandomisationModel) = length(RM.target)
-
+sequence(RM::RandomisationModel) = RM.sequence
+dist(RM::RandomisationModel) = RM.dist
+imbalance(RM::RandomisationModel) = euclidean(dist(RM), sum(dist(RM)) * target(RM))
+predictability(RM::RandomisationModel) = euclidean(prob(RM), target(RM))
 
 """
     randomise!(rng::AbstractRNG, RM::RandomisationModel)
@@ -27,7 +30,7 @@ Generate a single random allocation from a randomisation model using prob(RM) an
 """
 function randomise!(RM::RandomisationModel)
     y = sample(1:narms(RM), Weights(prob(RM)))
-    update!(MWU, y)
+    update!(RM, y)
     return y
 end
 randomize!(RM::RandomisationModel) = randomise!(RM::RandomisationModel)

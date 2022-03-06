@@ -1,6 +1,9 @@
 struct CompleteRandomisation{Ts<:AbstractVector} <: MultiArmRandomisationModel
     target::Ts
-    CompleteRandomisation{Ts}(target::Ts) where {Ts<:AbstractVector} = new{Ts}(target)
+    sequence::AbstractVector{Int}
+    dist::AbstractVector{Int}
+    CompleteRandomisation{Ts}(target::Ts, sequence::AbstractVector{Int}, dist::AbstractVector{Int}) where {Ts<:AbstractVector} =
+        new{Ts}(target, sequence, dist)
 end
 
 function CompleteRandomisation(target::AbstractVector{T}) where {T<:Real}
@@ -10,8 +13,12 @@ function CompleteRandomisation(target::AbstractVector{T}) where {T<:Real}
     if !Util.isnormvec(target)
         target = target ./ sum(target)
     end
-    CompleteRandomisation{typeof(target)}(target)
+    CompleteRandomisation{typeof(target)}(target, zeros(Int, 0), zeros(Int, length(target)))
 end
 
 prob(CR::CompleteRandomisation) = target(CR)
-update!(CR::CompleteRandomisation, y::Int) = nothing
+
+function update!(CR::CompleteRandomisation, y::Int)
+    push!(CR.sequence, y)
+    CR.dist[y] += 1
+end

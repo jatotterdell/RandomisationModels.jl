@@ -1,7 +1,17 @@
-struct PermutedBlock{Tv<:AbstractVector,T<:Real} <: MultiArmRandomisationModel
+struct PermutedBlock{Tv<:AbstractVector} <: MultiArmRandomisationModel
     target::Tv
-    b::T
-    PermutedBlock{Tv,T}(target::Tv, b::T) where {Tv<:AbstractVector,T<:Real} = new{Tv,T}(target, b)
+    b::Int
+    PermutedBlock{Tv}(target::Tv, b::Int) where {Tv<:AbstractVector} = new{Tv}(target, b)
+end
+
+function PermutedBlock(target::AbstractVector{T}, blocksize::Int) where {T<:Real}
+    if !Util.isposvec(target)
+        error("All values must be ≥ 0")
+    end
+    if !Util.isnormvec(target)
+        target = target ./ sum(target)
+    end
+    PermutedBlock{typeof(target)}(target, blocksize)
 end
 
 Base.deepcopy(m::PermutedBlock) = PermutedBlock(deepcopy(m.target), deepcopy(m.b))
