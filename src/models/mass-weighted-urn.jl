@@ -18,6 +18,7 @@ function MassWeightedUrn(target::AbstractVector{T}, α::Real) where {T<:Real}
     if α ≤ zero(typeof(α))
         error("α must be > 0")
     end
+    target = collect(target)
     mass = α .* target
     MassWeightedUrn{typeof(target),typeof(α)}(target, α, mass, zeros(Int, 0), zeros(Int, length(target)))
 end
@@ -42,7 +43,7 @@ mass(MWU::MassWeightedUrn) = MWU.mass
 prob(MWU::MassWeightedUrn) = max.(MWU.α .* mass(MWU), 0.0) ./ sum(max.(MWU.α .* mass(MWU), 0.0))
 
 function update!(MWU::MassWeightedUrn, y::Int)
-    MWU.mass[y] += (target(MWU)[y] - 1.0)
+    MWU.mass[y] += target(MWU)[y] - 1.0
     MWU.mass[1:end.!=y] += target(MWU)[1:end.!=y]
     push!(MWU.sequence, y)
     MWU.dist[y] += 1
