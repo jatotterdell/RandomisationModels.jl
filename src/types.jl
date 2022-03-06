@@ -2,6 +2,9 @@ abstract type RandomisationModel end
 abstract type TwoArmRandomisationModel <: RandomisationModel end
 abstract type MultiArmRandomisationModel <: RandomisationModel end
 
+target(RM::RandomisationModel) = RM.target
+narms(RM::RandomisationModel) = length(RM.target)
+
 
 """
     randomise!(rng::AbstractRNG, RM::RandomisationModel)

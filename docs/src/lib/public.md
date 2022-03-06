@@ -1,6 +1,6 @@
 # API
 
-## RandomisationModels
+## `RandomisationModels` Module
 
 ```@autodocs
 Modules = [RandomisationModels]

@@ -13,7 +13,5 @@ function CompleteRandomisation(target::AbstractVector{T}) where {T<:Real}
     CompleteRandomisation{typeof(target)}(target)
 end
 
-target(CR::CompleteRandomisation) = CR.target
-narms(CR::CompleteRandomisation) = length(CR.target)
 prob(CR::CompleteRandomisation) = target(CR)
 update!(CR::CompleteRandomisation, y::Int) = nothing

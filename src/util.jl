@@ -1,4 +1,10 @@
+"""
+    Util
+
+A submodule that provides various utility functions used elsewhere in the main Module.
+"""
 module Util
+
 
 """
     isposvec(p)
@@ -27,12 +33,14 @@ isprobvec(p::AbstractVector{<:Real}) =
     isposvec(p) && isnormvec(p)
 
 
-function random_sample(p::AbstractVector{<:Real}) 
+function random_sample(p::AbstractVector{<:Real})
     isprobvec(p) ? searchsortedlast([0.0; cumsum(p)], rand()) : error("p must be a probability vector")
 end
 function random_sample(p::AbstractVector{<:Real}, u::Real)
-    if u ≤ 0 || u ≥ 1 error("Must have 0 < u < 1") end
+    if u ≤ 0 || u ≥ 1
+        error("Must have 0 < u < 1")
+    end
     isprobvec(p) ? searchsortedlast([0.0; cumsum(p)], u) : error("p must be a probability vector")
 end
 
-end
+end # End Util Module

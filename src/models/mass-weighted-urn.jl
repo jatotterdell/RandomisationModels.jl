@@ -19,8 +19,6 @@ end
 
 Base.deepcopy(m::MassWeightedUrn) = MassWeightedUrn(deepcopy(m.target), deepcopy(m.α))
 
-target(MWU::MassWeightedUrn) = MWU.target
-narms(MWU::MassWeightedUrn) = length(MWU.target)
 mass(MWU::MassWeightedUrn) = MWU.mass
 prob(MWU::MassWeightedUrn) = max.(MWU.α .* mass(MWU), 0.0) ./ sum(max.(MWU.α .* mass(MWU), 0.0))
 

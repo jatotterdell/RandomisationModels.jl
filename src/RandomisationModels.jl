@@ -8,8 +8,9 @@ export MultiArmRandomisationModel
 export CompleteRandomisation
 export MassWeightedUrn
 
-export randomise, randomize, randomise!, randomize!
-export target, narms, prob, update!
+export target, narms, randomise, randomize, randomise!, randomize!
+export prob, update!
+export mass
 
 # Internal helper functions
 include("util.jl")
