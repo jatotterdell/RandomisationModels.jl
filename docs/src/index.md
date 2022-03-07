@@ -25,21 +25,40 @@ using VegaLite
 
 C = [CompleteRandomisation(1:4) for _ in 1:10_000]
 M = [MassWeightedUrn(1:4, 4) for _ in 1:10_000]
-c = zeros(Real, 100, 10_000)
-m = zeros(Real, 100, 10_000)
+P = [PermutedBlock(1:4, 10) for _ in 1:10_000]
+c = zeros(Real, 100, 10_000, 2)
+m = zeros(Real, 100, 10_000, 2)
+p = zeros(Real, 100, 10_000, 2)
 for i in 1:100
     randomise!.(C)
     randomise!.(M)
-    c[i,:] = imbalance.(C)
-    m[i,:] = imbalance.(M)
+    randomise!.(P)
+    c[i,:,:] = [imbalance.(C) predictability.(C)]
+    m[i,:,:] = [imbalance.(M) predictability.(M)]
+    p[i,:,:] = [imbalance.(P) predictability.(P)]
 end
+c = mean(c, dims = 2)
+m = mean(m, dims = 2)
+p = mean(p, dims = 2)
 dat = DataFrame(
     t = 1:100, 
-    CR = mean(c, dims = 2)[:,1],
-    MWU = mean(m, dims = 2)[:,1])
-dat = stack(dat, [:CR, :MWU], :t, 
-    variable_name = "Model", value_name = "Imbalance")
-dat |> @vlplot(width = 400, height = 300,
-    :line, :t, :Imbalance, color = :Model, 
-    title = "Average imbalance (10,000 simulations)")
+    CR_Imbalance = c[:,1,1],
+    CR_Predictability  = c[:,1,2],
+    MWU_Imbalance = m[:,1,1],
+    MWU_Predictability  = m[:,1,2],
+    PB_Imbalance = p[:,1,1],
+    PB_Predictability  = p[:,1,2])
+dat = stack(dat, Not(:t), :t, 
+    variable_name = "Model", value_name = "value")
+transform!(dat, :Model => ByRow(x -> split(x, "_")) => [:Model, :Measure])
+dat = unstack(dat, :Measure, :value)
+dat |> 
+@vlplot(repeat = {column=[:Imbalance, :Predictability]}, title = "10,000 simulations") +
+(
+    @vlplot(
+        :line, 
+        x = :t, 
+        y = {field = {repeat=:column},aggregate=:mean,type=:quantitative}, 
+        color = :Model)
+)
 ```

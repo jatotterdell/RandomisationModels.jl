@@ -1,7 +1,7 @@
 module RandomisationModels
 
 using Random: AbstractRNG, GLOBAL_RNG
-using StatsBase: sample, Weights
+using StatsBase: sample, Weights, FrequencyWeights
 using Distances: euclidean
 
 import Base.deepcopy
@@ -10,10 +10,11 @@ import Base.show
 export MultiArmRandomisationModel
 export CompleteRandomisation
 export MassWeightedUrn
+export PermutedBlock
 
 export target, narms, sequence, dist, imbalance, predictability, randomise, randomize, randomise!, randomize!
 export prob, update!
-export mass
+export mass, blocksize
 
 # Internal helper functions
 include("util.jl")
@@ -23,5 +24,6 @@ export Util
 include("types.jl")
 include("models/complete-randomisation.jl")
 include("models/mass-weighted-urn.jl")
+include("models/permuted-block.jl")
 
 end # module

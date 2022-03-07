@@ -1,3 +1,8 @@
+"""
+    MassWeightedUrn <: MultiArmRandomisationModel
+
+A mass-weighted urn randomisation model.
+"""
 struct MassWeightedUrn{Tv<:AbstractVector,T<:Real} <: MultiArmRandomisationModel
     target::Tv
     α::T
@@ -8,6 +13,10 @@ struct MassWeightedUrn{Tv<:AbstractVector,T<:Real} <: MultiArmRandomisationModel
         new{Tv,T}(target, α, mass, sequence, dist)
 end
 
+
+"""
+    MassWeightedUrn(target::AbstractVector{T}, α::Real) where {T<:Real}
+"""
 function MassWeightedUrn(target::AbstractVector{T}, α::Real) where {T<:Real}
     if !Util.isposvec(target)
         error("All values must be ≥ 0")
