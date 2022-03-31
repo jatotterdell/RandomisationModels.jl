@@ -36,7 +36,7 @@ function PermutedBlock(target::AbstractVector{T}, blocksize::Int) where {T<:Real
     )
 end
 
-Base.deepcopy(m::PermutedBlock) = PermutedBlock(deepcopy(m.target), deepcopy(m.b))
+Base.deepcopy(m::PermutedBlock) = PermutedBlock(deepcopy(m.target), deepcopy(m.blocksize))
 
 function show(io::IO, PB::PermutedBlock)
     k = length(PB.target)

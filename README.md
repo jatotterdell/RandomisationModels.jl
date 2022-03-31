@@ -6,7 +6,24 @@
 
 Implementation of randomisation models used for generating treatment allocations in clinical trials.
 
-# Installation
+## Overview
+
+Plan for
+
+- unrestricted randomisation
+- restricted randomisation
+  - two-arm
+    - biased-coin
+  - mult-arm
+    - permuted block
+    - brick-tunnel
+    - urn models
+- covariate-adjusted randomisation
+  - minimisation
+  - model-based
+- utilities for simulations studies comparing models
+
+## Installation
 
 ```julia
 pkg> add RandomisationModels
