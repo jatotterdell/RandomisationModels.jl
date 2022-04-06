@@ -2,13 +2,16 @@ struct CompleteRandomisation{Ts<:AbstractVector} <: MultiArmRandomisationModel
     target::Ts
     sequence::AbstractVector{Int}
     dist::AbstractVector{Int}
-    CompleteRandomisation{Ts}(target::Ts, sequence::AbstractVector{Int}, dist::AbstractVector{Int}) where {Ts<:AbstractVector} =
+    CompleteRandomisation{Ts}(
+        target::Ts,
+        sequence::AbstractVector{Int},
+        dist::AbstractVector{Int}) where {Ts<:AbstractVector} =
         new{Ts}(target, sequence, dist)
 end
 
 function CompleteRandomisation(target::AbstractVector{T}) where {T<:Real}
     if !Util.isposvec(target)
-        error("All values must be ≥ 0")
+        throw(DomainError(target, "All values must be ≥ 0"))
     end
     if !Util.isnormvec(target)
         target = target ./ sum(target)

@@ -9,11 +9,12 @@ dist(RM::RandomisationModel) = RM.dist
 imbalance(RM::RandomisationModel) = euclidean(dist(RM), sum(dist(RM)) * target(RM))
 predictability(RM::RandomisationModel) = euclidean(prob(RM), target(RM))
 
+
 """
     randomise!(rng::AbstractRNG, RM::RandomisationModel)
 
-Generate a single random allocation from a randomisation model using prob(RM) and
-the random number generator provided.
+Generate a single random allocation from a randomisation model, `RM`, 
+using `prob(RM)` and the random number generator provided.
 """
 function randomise!(rng::AbstractRNG, RM::RandomisationModel)
     y = sample(rng, 1:narms(RM), Weights(prob(RM)))
@@ -46,7 +47,6 @@ function randomise!(rng::AbstractRNG, RM::RandomisationModel, n::Int)
     # u = rand(rng, n)
     y = zeros(Int, n)
     for i in 1:n
-        # y[i] = random_sample(prob(MWU), u[i])
         y[i] = sample(rng, 1:narms(RM), Weights(prob(RM)))
         update!(RM, y[i])
     end
