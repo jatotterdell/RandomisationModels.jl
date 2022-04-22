@@ -1,7 +1,8 @@
 """
-    MassWeightedUrn <: MultiArmRandomisationModel
+$(TYPEDEF)
 
-A mass-weighted urn randomisation model.
+# Fields
+$(TYPEDFIELDS)
 """
 struct MassWeightedUrn{Tv<:AbstractVector,T<:Real} <: MultiArmRandomisationModel
     target::Tv
@@ -15,13 +16,13 @@ end
 
 
 """
-    MassWeightedUrn(target::AbstractVector{T}, α::Real) where {T<:Real}
+$(TYPEDSIGNATURES)
 """
 function MassWeightedUrn(target::AbstractVector{T}, α::Real) where {T<:Real}
-    if !Util.isposvec(target)
+    if !isposvec(target)
         error("All values must be ≥ 0")
     end
-    if !Util.isprobvec(target)
+    if !isprobvec(target)
         target = target ./ sum(target)
     end
     if α ≤ zero(typeof(α))
@@ -33,7 +34,7 @@ function MassWeightedUrn(target::AbstractVector{T}, α::Real) where {T<:Real}
 end
 
 function MassWeightedUrn(target::AbstractVector{T}) where {T<:Real}
-    if !Util.isprobvec(target)
+    if !isprobvec(target)
         # error("target must sum to 1")
         target = target ./ sum(target)
     end
@@ -51,6 +52,10 @@ end
 mass(MWU::MassWeightedUrn) = MWU.mass
 prob(MWU::MassWeightedUrn) = max.(MWU.α .* mass(MWU), 0.0) ./ sum(max.(MWU.α .* mass(MWU), 0.0))
 
+
+"""
+$(TYPEDSIGNATURES)
+"""
 function update!(MWU::MassWeightedUrn, y::Int)
     MWU.mass[y] += target(MWU)[y] - 1.0
     MWU.mass[1:end.!=y] += target(MWU)[1:end.!=y]

@@ -1,5 +1,6 @@
 module RandomisationModels
 
+using DocStringExtensions
 using Random: AbstractRNG, GLOBAL_RNG
 using StatsBase: sample, Weights, FrequencyWeights
 using Distances: euclidean
@@ -18,8 +19,6 @@ export mass, blocksize
 
 # Internal helper functions
 include("util.jl")
-using .Util
-export Util
 
 include("types.jl")
 include("models/complete-randomisation.jl")

@@ -1,27 +1,37 @@
+"""
+$(TYPEDEF)
+
+# Fields
+$(TYPEDFIELDS)
+"""
 struct PermutedBlock{Tv<:AbstractVector} <: MultiArmRandomisationModel
     target::Tv
     blocksize::Int
-    weights::FrequencyWeights{Int}
+    weights::AbstractVector{Int}
     sequence::AbstractVector{Int}
     dist::AbstractVector{Int}
     PermutedBlock{Tv}(
         target::Tv,
         blocksize::Int,
-        weights::FrequencyWeights,
+        weights::AbstractVector{Int},
         sequence::AbstractVector{Int},
         dist::AbstractVector{Int},
     ) where {Tv<:AbstractVector} = new{Tv}(target, blocksize, weights, sequence, dist)
 end
 
+
+"""
+$(TYPEDSIGNATURES)
+"""
 function PermutedBlock(target::AbstractVector{T}, blocksize::Int) where {T<:Real}
-    if !Util.isposvec(target)
+    if !isposvec(target)
         throw(DomainError(target, "All values must be ≥ 0"))
     end
-    if !Util.isnormvec(target)
+    if !isnormvec(target)
         target = target ./ sum(target)
     end
     target = collect(target)
-    weights = FrequencyWeights(Util.convert_prob_to_intweight(target))
+    weights = convert_prob_to_intweight(target)
     R = sum(weights)
     # check that blocksize is integer multiple of R
     if mod(blocksize, R) != 0
@@ -46,6 +56,7 @@ end
 
 blocksize(PB::PermutedBlock) = PB.blocksize
 
+
 function prob(PB::PermutedBlock)
     b = blocksize(PB)
     w = PB.weights ./ sum(PB.weights)
@@ -56,7 +67,10 @@ function prob(PB::PermutedBlock)
 end
 
 
-function update!(PB::PermutedBlock, y::Int) 
+"""
+$(TYPEDSIGNATURES)
+"""
+function update!(PB::PermutedBlock, y::Int)
     push!(PB.sequence, y)
     PB.dist[y] += 1
     return nothing
