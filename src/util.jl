@@ -39,10 +39,13 @@ convert_prob_to_intweight(target::Vector{<:Real}) =
     round.(Int, target / minimum(nonzero(target)))
 
 
-
+"""
+$(TYPEDSIGNATURES)
+"""
 calculate_min_blocksize(target::Vector{<:Real}) =
     sum(convert_prob_to_intweight(target))
 
+    
 function random_sample(p::AbstractVector{<:Real})
     isprobvec(p) ? searchsortedlast([0.0; cumsum(p)], rand()) :
     error("p must be a probability vector")
