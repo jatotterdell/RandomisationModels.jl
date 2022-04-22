@@ -10,8 +10,13 @@ struct MassWeightedUrn{Tv<:AbstractVector,T<:Real} <: MultiArmRandomisationModel
     mass::Tv
     sequence::AbstractVector{Int}
     dist::AbstractVector{Int}
-    MassWeightedUrn{Tv,T}(target::Tv, α::T, mass::Tv, sequence::AbstractVector{Int}, dist::AbstractVector{Int}) where {Tv<:AbstractVector,T<:Real} =
-        new{Tv,T}(target, α, mass, sequence, dist)
+    MassWeightedUrn{Tv,T}(
+        target::Tv,
+        α::T,
+        mass::Tv,
+        sequence::AbstractVector{Int},
+        dist::AbstractVector{Int},
+    ) where {Tv<:AbstractVector,T<:Real} = new{Tv,T}(target, α, mass, sequence, dist)
 end
 
 
@@ -30,9 +35,19 @@ function MassWeightedUrn(target::AbstractVector{T}, α::Real) where {T<:Real}
     end
     target = collect(target)
     mass = α .* target
-    MassWeightedUrn{typeof(target),typeof(α)}(target, α, mass, zeros(Int, 0), zeros(Int, length(target)))
+    MassWeightedUrn{typeof(target),typeof(α)}(
+        target,
+        α,
+        mass,
+        zeros(Int, 0),
+        zeros(Int, length(target)),
+    )
 end
 
+
+"""
+$(TYPEDSIGNATURES)
+"""
 function MassWeightedUrn(target::AbstractVector{T}) where {T<:Real}
     if !isprobvec(target)
         # error("target must sum to 1")
@@ -50,7 +65,8 @@ function show(io::IO, MWU::MassWeightedUrn)
 end
 
 mass(MWU::MassWeightedUrn) = MWU.mass
-prob(MWU::MassWeightedUrn) = max.(MWU.α .* mass(MWU), 0.0) ./ sum(max.(MWU.α .* mass(MWU), 0.0))
+prob(MWU::MassWeightedUrn) =
+    max.(MWU.α .* mass(MWU), 0.0) ./ sum(max.(MWU.α .* mass(MWU), 0.0))
 
 
 """

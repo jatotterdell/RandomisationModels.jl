@@ -11,10 +11,14 @@ struct CompleteRandomisation{Ts<:AbstractVector} <: MultiArmRandomisationModel
     CompleteRandomisation{Ts}(
         target::Ts,
         sequence::AbstractVector{Int},
-        dist::AbstractVector{Int}) where {Ts<:AbstractVector} =
-        new{Ts}(target, sequence, dist)
+        dist::AbstractVector{Int},
+    ) where {Ts<:AbstractVector} = new{Ts}(target, sequence, dist)
 end
 
+
+"""
+$(TYPEDSIGNATURES)
+"""
 function CompleteRandomisation(target::AbstractVector{T}) where {T<:Real}
     if !isposvec(target)
         throw(DomainError(target, "All values must be ≥ 0"))
