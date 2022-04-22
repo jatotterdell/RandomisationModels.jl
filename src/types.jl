@@ -9,6 +9,15 @@ dist(RM::RandomisationModel) = RM.dist
 imbalance(RM::RandomisationModel) = euclidean(dist(RM), sum(dist(RM)) * target(RM))
 predictability(RM::RandomisationModel) = euclidean(prob(RM), target(RM))
 
+function ==(a::V, b::V) where V <: RandomisationModel
+    for name in fieldnames(V)
+        if !(getfield(a, name) ≈ getfield(b, name))
+            return false
+        end
+    end
+    return true
+end
+
 
 """
     randomise!(rng::AbstractRNG, RM::RandomisationModel)

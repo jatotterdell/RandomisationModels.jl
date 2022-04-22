@@ -4,46 +4,57 @@ $(TYPEDEF)
 # Fields
 $(TYPEDFIELDS)
 """
-struct PermutedBlock{Tv<:AbstractVector} <: MultiArmRandomisationModel
-    target::Tv
-    blocksize::Int
-    weights::AbstractVector{Int}
-    sequence::AbstractVector{Int}
-    dist::AbstractVector{Int}
-    PermutedBlock{Tv}(
-        target::Tv,
-        blocksize::Int,
-        weights::AbstractVector{Int},
-        sequence::AbstractVector{Int},
-        dist::AbstractVector{Int},
-    ) where {Tv<:AbstractVector} = new{Tv}(target, blocksize, weights, sequence, dist)
+struct PermutedBlock <: MultiArmRandomisationModel
+    target::AbstractVector{<:AbstractFloat}
+    blocksize::Integer
+    weights::AbstractVector{<:Integer}
+    W::Integer
+    sequence::AbstractVector{<:Integer}
+    dist::AbstractVector{<:Integer}
+    PermutedBlock(
+        target::AbstractVector{<:AbstractFloat},
+        blocksize::Integer,
+        weights::AbstractVector{<:Integer},
+        W::Integer,
+        sequence::AbstractVector{<:Integer},
+        dist::AbstractVector{<:Integer},
+    ) = new(target, blocksize, weights, W, sequence, dist)
 end
 
 
 """
 $(TYPEDSIGNATURES)
 """
-function PermutedBlock(target::AbstractVector{T}, blocksize::Int) where {T<:Real}
+function PermutedBlock(weights::AbstractVector{<:Integer}, blocksize::Int)
+    if !all(weights .≥ zero(eltype(weights)))
+        throw(DomainError(weights, "All values must be ≥ 0"))
+    end
+    target = normalize(weights, 1)
+    W = sum(weights)
+    if mod(blocksize, W) != 0
+        throw(DomainError(blocksize, "blocksize not integer multiple of sum(weights)."))
+    end
+    PermutedBlock(target, blocksize, weights, W, zeros(Int, 0), zeros(Int, length(target)))
+end
+
+
+"""
+$(TYPEDSIGNATURES)
+"""
+function PermutedBlock(target::AbstractVector{<:AbstractFloat}, blocksize::Int)
     if !isposvec(target)
         throw(DomainError(target, "All values must be ≥ 0"))
     end
     if !isnormvec(target)
         target = target ./ sum(target)
     end
-    target = collect(target)
-    weights = convert_prob_to_intweight(target)
-    R = sum(weights)
-    # check that blocksize is integer multiple of R
-    if mod(blocksize, R) != 0
-        error("blocksize must be an integer multiple of sum(weight).")
+    weights = round.(Int, target .* blocksize)
+    W = sum(weights)
+    if mod(blocksize, W) != 0
+        errstr = "blocksize not integer multiple of sum(target*blocksize)."
+        throw(DomainError(blocksize, errstr))
     end
-    PermutedBlock{typeof(target)}(
-        target,
-        blocksize,
-        weights,
-        zeros(Int, 0),
-        zeros(Int, length(target)),
-    )
+    PermutedBlock(target, blocksize, weights, W, zeros(Int, 0), zeros(Int, length(target)))
 end
 
 Base.deepcopy(m::PermutedBlock) = PermutedBlock(deepcopy(m.target), deepcopy(m.blocksize))
@@ -55,11 +66,15 @@ function show(io::IO, PB::PermutedBlock)
 end
 
 blocksize(PB::PermutedBlock) = PB.blocksize
+weights(PB::PermutedBlock) = PB.weights
+target(PB::PermutedBlock) = PB.target
 
-
+"""
+$(TYPEDSIGNATURES)
+"""
 function prob(PB::PermutedBlock)
     b = blocksize(PB)
-    w = PB.weights ./ sum(PB.weights)
+    w = target(PB)
     n = dist(PB)
     i = sum(n) + 1
     k = floor((i - 1) / b) # completed blocks
