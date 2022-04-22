@@ -15,13 +15,13 @@ end
 
 function PermutedBlock(target::AbstractVector{T}, blocksize::Int) where {T<:Real}
     if !Util.isposvec(target)
-        error("All values must be ≥ 0")
+        throw(DomainError(target, "All values must be ≥ 0"))
     end
     if !Util.isnormvec(target)
         target = target ./ sum(target)
     end
     target = collect(target)
-    weights = FrequencyWeights(round.(Int, target / minimum(target)))
+    weights = FrequencyWeights(Util.convert_prob_to_intweight(target))
     R = sum(weights)
     # check that blocksize is integer multiple of R
     if mod(blocksize, R) != 0

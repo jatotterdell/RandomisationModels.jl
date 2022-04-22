@@ -31,11 +31,20 @@ isprobvec(p::AbstractVector{<:Real}) = isposvec(p) && isnormvec(p)
 
 
 """
+    nonzero(p::AbstractVector{<:Real})
+
+Return non-zero elements of a vector.
+"""
+nonzero(p::AbstractVector{<:Real}) = p[p.!=zero(eltype(p))]
+
+
+"""
     convert_prob_to_intweight(target::Vector{<:Real})
 
 Convert a vector to a vector of integer weights
 """
-convert_prob_to_intweight(target::Vector{<:Real}) = trunc.(Int, target / minimum(target))
+convert_prob_to_intweight(target::Vector{<:Real}) =
+    trunc.(Int, target / minimum(nonzero(target)))
 
 
 function random_sample(p::AbstractVector{<:Real})
