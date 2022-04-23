@@ -18,7 +18,7 @@ export BlockUrn
 
 export target, narms, sequence, dist, imbalance, predictability, randomise, randomize, randomise!, randomize!
 export prob, update!
-export mass, blocksize
+export mass, blocksize, weights
 
 # Internal helper functions
 include("util.jl")

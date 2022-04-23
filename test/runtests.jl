@@ -1,15 +1,14 @@
 using Test, Random, Distances
 using RandomisationModels
 
-
-begin
-
-    @testset "CompleteRandomisation" begin
-        include("models/complete-randomisation.jl")
+macro include_testset(filename)
+    @assert filename isa AbstractString
+    quote
+        @testset $(filename) begin
+            include($(filename))
+        end
     end
-
-    @testset "PermutedBlockRandomisation" begin
-        include("models/permuted-block.jl")
-    end
-
 end
+
+@include_testset "models/complete-randomisation.jl"
+@include_testset "models/permuted-block.jl"
