@@ -74,11 +74,13 @@ $(TYPEDSIGNATURES)
 """
 function prob(PB::PermutedBlock)
     b = blocksize(PB)
-    w = target(PB)
+    w = weights(PB)
+    W = PB.W
+    λ = b ÷ W
     n = dist(PB)
     i = sum(n) + 1
-    k = floor((i - 1) / b) # completed blocks
-    return (b * w + b * w * k - n) / (b + b * k - (i - 1))
+    k = floor((i - 1) ÷ b) # completed blocks
+    return (λ * w + λ * w * k - n) / (b + b * k - (i - 1))
 end
 
 
