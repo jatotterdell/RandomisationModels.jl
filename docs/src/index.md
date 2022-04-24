@@ -6,6 +6,11 @@ Documentation for RandomisationModels.jl
 
 ## Installation
 
+```julia
+using Pkg
+Pkg.add("https://github.com/jatotterdell/RandomisationModels.jl.git")
+```
+
 ## Quick Example
 
 ```@example quick
@@ -68,4 +73,9 @@ dat |>
         y = {field = {repeat=:column},aggregate=:mean,type=:quantitative}, 
         color = :Model)
 )
+```
+
+```@example version
+using InteractiveUtils
+versioninfo()
 ```
