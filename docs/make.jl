@@ -1,5 +1,3 @@
-push!(LOAD_PATH, "../src/")
-
 using Documenter
 using RandomisationModels
 
@@ -9,7 +7,7 @@ makedocs(
     authors = "James Totterdell",
     pages = [
         "Home" => "index.md",
-        "Models" => ["models/complete-randomisation.md", "models/block-urn.md"],
+        "Models" => ["models/multi-arm.md"],
         "Library" => ["lib/public.md"],
     ],
     format = Documenter.HTML(prettyurls = false),

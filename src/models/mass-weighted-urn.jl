@@ -1,6 +1,14 @@
 """
 $(TYPEDEF)
 
+Implements the Mass Weighted Urn Design (MWUD) of [Zhao (2015)](https://doi.org/10.1016/j.cct.2015.06.008).
+
+The MWU has conditional allocation probability
+
+```math
+P_{im} = \\frac{\\max{\\alpha w_m - n_{i-1,m} + (i - 1)w_m, 0}}{\\sum \\max{\\alpha w_m - n_{i-1,m} + (i - 1)w_m, 0}}
+```
+
 # Fields
 $(TYPEDFIELDS)
 """

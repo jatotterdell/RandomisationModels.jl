@@ -1,6 +1,15 @@
 """
 $(TYPEDEF)
 
+Implements the Block Urn Design (BUD) of [Zhao and Wang (2011)](https://doi.org/10.1016/j.cct.2011.08.004).
+
+The BUD has conditional allocation probability
+
+```math
+P_{im} = \\frac{w_m\\lambda + w_mk_{i-1}-n_{i-1,m}}{W\\lambda + Wk_{i-1} - (i - 1)},
+\\quad k_{i-1} = \\min_{m=1,...,M} \\left\\lfloor \\frac{n_{i-1,k}}{w_k} \\right\\rfloor.
+```
+
 # Fields
 $(TYPEDFIELDS)
 """
