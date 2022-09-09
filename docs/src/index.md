@@ -46,33 +46,46 @@ for i in 1:100
     p[i,:,:] = [imbalance.(P) predictability.(P)]
     b[i,:,:] = [imbalance.(B) predictability.(B)]
 end
-c = mean(c, dims = 2)
-m = mean(m, dims = 2)
-p = mean(p, dims = 2)
-b = mean(b, dims = 2)
+c_mean = mean(c, dims = 2)
+m_mean = mean(m, dims = 2)
+p_mean = mean(p, dims = 2)
+b_mean = mean(b, dims = 2)
+c_max = maximum(c, dims = 2)
+m_max = maximum(m, dims = 2)
+p_max = maximum(p, dims = 2)
+b_max = maximum(b, dims = 2)
 dat = DataFrame(
     t = 1:100, 
-    CR_Imbalance = c[:,1,1],
-    CR_Predictability  = c[:,1,2],
-    MWU_Imbalance = m[:,1,1],
-    MWU_Predictability  = m[:,1,2],
-    PB_Imbalance = p[:,1,1],
-    PB_Predictability  = p[:,1,2],
-    BU_Imbalance = b[:,1,1],
-    BU_Predictability = b[:,1,2])
+    CR_Mean_Imbalance = c_mean[:,1,1],
+    CR_Mean_Predictability  = c_mean[:,1,2],
+    CR_Max_Imbalance = c_max[:,1,1],
+    CR_Max_Predictability  = c_max[:,1,2],
+    MWU_Mean_Imbalance = m_mean[:,1,1],
+    MWU_Mean_Predictability  = m_mean[:,1,2],
+    MWU_Max_Imbalance = m_max[:,1,1],
+    MWU_Max_Predictability  = m_max[:,1,2],
+    PB_Mean_Imbalance = p_mean[:,1,1],
+    PB_Mean_Predictability  = p_mean[:,1,2],
+    PB_Max_Imbalance = p_max[:,1,1],
+    PB_Max_Predictability  = p_max[:,1,2],
+    BU_Mean_Imbalance = b_mean[:,1,1],
+    BU_Mean_Predictability = b_mean[:,1,2],
+    BU_Max_Imbalance = b_max[:,1,2],
+    BU_Max_Predictability = b_max[:,1,2]
+)
 dat = stack(dat, Not(:t), :t, 
     variable_name = "Model", value_name = "value")
-transform!(dat, :Model => ByRow(x -> split(x, "_")) => [:Model, :Measure])
-dat = unstack(dat, :Measure, :value)
-dat |> 
-@vlplot(repeat = {column=[:Imbalance, :Predictability]}, title = "10,000 simulations") +
-(
+transform!(dat, :Model => ByRow(x -> split(x, "_")) => [:Model, :Summary, :Measure])
+dat |>
     @vlplot(
-        :line, 
+        :line,
         x = :t, 
-        y = {field = {repeat=:column},aggregate=:mean,type=:quantitative}, 
-        color = :Model)
-)
+        y = {field = :value, type=:quantitative, axis = {title = "Value"}},
+        color = :Model,
+        row = {field = :Summary, typ = :nominal}, 
+        column = {field = :Measure, typ = :nominal},
+        resolve = {scale = {y = "independent"}}
+    )
 ```
 
 ```@example version
