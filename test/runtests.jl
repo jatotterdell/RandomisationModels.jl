@@ -12,3 +12,4 @@ end
 
 @include_testset "models/complete-randomisation.jl"
 @include_testset "models/permuted-block.jl"
+@include_testset "models/mass-weighted-urn.jl"

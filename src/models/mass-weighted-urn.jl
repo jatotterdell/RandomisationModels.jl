@@ -33,7 +33,7 @@ $(TYPEDSIGNATURES)
 """
 function MassWeightedUrn(target::AbstractVector{T}, α::Real) where {T<:Real}
     if !isposvec(target)
-        error("All values must be ≥ 0")
+        throw(DomainError(target, "All values must be ≥ 0"))
     end
     if !isprobvec(target)
         target = target ./ sum(target)
